@@ -1,5 +1,10 @@
 # Knowledge Base Log
 
+## 2026-07-08
+
+- **Governance**: Added `AGENTS.md` guidance for shared or agent-maintained knowledge bases.
+- **Validation**: Treat `AGENTS.md` as a governance file, not an OKF concept note.
+
 ## 2026-07-01
 
 - **Documentation**: Added quick-start card guidance, optional Obsidian notes, and validator instructions.

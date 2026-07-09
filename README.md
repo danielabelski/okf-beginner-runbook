@@ -4,6 +4,8 @@ Build or inspect an Open Knowledge Format knowledge base with any file-capable A
 
 This package helps a person or AI agent create, inspect, or gradually convert a knowledge base into an Open Knowledge Format style structure.
 
+Current version: `v0.1.1`
+
 ## What This Does
 
 Use this runbook with your agent. The agent asks qualifying questions about your setup and how you want to move forward. Then the agent can build a new knowledge base or modify your existing one to follow Google's OKF format and rules.
@@ -32,6 +34,7 @@ It is designed to work as a plain downloaded folder. Git is optional.
 - `prompts/` - Copy-paste prompts for agents and AI tools.
 - `examples/` - Small examples of OKF-style files.
 - `validate-okf.py` - A tiny dependency-free Python validator for basic OKF checks.
+- `AGENTS.md` guidance - Optional but recommended governance for shared or agent-maintained knowledge bases.
 - `ABOUT.md` - Project background and purpose.
 - `CONTACT.md` - How to ask questions or suggest improvements.
 - `PRIVACY.md` - Plain privacy note for this static open-source project.

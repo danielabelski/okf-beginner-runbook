@@ -11,6 +11,7 @@ from pathlib import Path
 
 LINK_RE = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
 BAD_PATH_RE = re.compile(r"(^|[(/\\])([A-Za-z]:\\|/home/)")
+RESERVED_MARKDOWN = {"index.md", "log.md", "agents.md"}
 
 
 def parse_args() -> argparse.Namespace:
@@ -77,7 +78,7 @@ def validate(root: Path) -> list[str]:
 
     for path in sorted(root.rglob("*.md")):
         name = path.name.lower()
-        if name in {"index.md", "log.md"}:
+        if name in RESERVED_MARKDOWN:
             if not has_content(path):
                 failures.append(f"{rel(path, root)}: reserved file is empty")
         else:

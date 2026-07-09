@@ -16,6 +16,7 @@ Optional: open the OKF folder in Obsidian as a free visual Markdown vault.
 
 ```text
 okf-knowledge-base/
+  AGENTS.md
   index.md
   log.md
   getting-started.md
@@ -51,8 +52,11 @@ timestamp: 2026-07-01T00:00:00Z
 
 - `index.md` = discovery
 - `log.md` = history
+- `AGENTS.md` = optional governance for shared or agent-maintained vaults
 
 Reserved files do not need frontmatter. Other `.md` files need frontmatter with a non-empty `type`.
+
+For a solo human-only vault, `AGENTS.md` is optional. For a shared, operational, or agent-maintained vault, create it so agents know what belongs, what is off limits, and when to ask before editing.
 
 ## Copy-Paste Prompts
 

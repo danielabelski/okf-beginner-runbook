@@ -10,6 +10,8 @@ timestamp: 2026-06-27T00:00:00Z
 
 Use `index.md` files to navigate the knowledge base. Add one concept per Markdown file. Update `log.md` after meaningful changes.
 
+If this knowledge base is shared, operational, or maintained by AI agents, read `AGENTS.md` before editing. It defines governance rules, placement rules, privacy boundaries, and approval rules.
+
 ## How To Add A New Concept
 
 1. Copy `_templates/concept-template.md.tmpl`.
@@ -19,4 +21,3 @@ Use `index.md` files to navigate the knowledge base. Add one concept per Markdow
 5. Add links to related files.
 6. Update the nearest `index.md` if the file is important.
 7. Add a short entry to `log.md` for meaningful changes.
-

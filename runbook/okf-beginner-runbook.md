@@ -277,6 +277,7 @@ Create this starter structure unless the user requests something else:
 
 ```text
 okf-knowledge-base/
+  AGENTS.md
   index.md
   log.md
   getting-started.md
@@ -297,6 +298,27 @@ okf-knowledge-base/
 ```
 
 Then create three to ten starter concept files based on the user's chosen domain.
+
+### Optional Agent Governance File
+
+If the OKF knowledge base will be shared, operational, or edited by AI agents over time, add a root `AGENTS.md` file.
+
+OKF describes the knowledge format. `AGENTS.md` describes how an agent should behave inside the knowledge base.
+
+Use `AGENTS.md` to define:
+
+- the purpose of the knowledge base
+- what belongs and what does not belong
+- folder placement rules
+- privacy boundaries
+- when to update `index.md`
+- when to update `log.md`
+- whether the agent may create, edit, move, or delete files
+- when the agent should ask the human first
+
+For a solo human-only vault, `AGENTS.md` is optional. For a shared, operational, or agent-maintained vault, it is recommended.
+
+`AGENTS.md` is a governance file, not an OKF concept file. It does not need YAML frontmatter.
 
 `getting-started.md` is a non-reserved OKF concept file, so it needs frontmatter:
 
@@ -531,12 +553,13 @@ The agent must not load the whole OKF folder into context at once.
 
 The agent should:
 
-1. Read the root `index.md`.
-2. Follow only relevant links.
-3. Open folder-level `index.md` files as needed.
-4. Read only the concept files needed for the current task.
-5. Use `log.md` to understand recent changes.
-6. Ask before making broad edits.
+1. Read root `AGENTS.md` first if it exists.
+2. Read the root `index.md`.
+3. Follow only relevant links.
+4. Open folder-level `index.md` files as needed.
+5. Read only the concept files needed for the current task.
+6. Use `log.md` to understand recent changes.
+7. Ask before making broad edits.
 
 This keeps the agent focused and prevents wasting context on unrelated files.
 
@@ -596,15 +619,21 @@ The agent asks before creating or modifying files.
 
 The agent creates only approved folders and files.
 
-### Step 9: Create starter files
+### Step 9: Create governance file when appropriate
+
+If the knowledge base will be shared, operational, or maintained by agents, the agent creates a root `AGENTS.md` file with usage rules, folder placement rules, privacy boundaries, and approval rules.
+
+For a private solo vault that only one person edits manually, the agent may skip `AGENTS.md` unless the user wants it.
+
+### Step 10: Create starter files
 
 The agent creates three to ten starter concept files based on the chosen domain. If converting an existing folder, the agent may instead create three to ten OKF-style files that summarize, link to, or carefully refactor approved existing notes.
 
-### Step 10: Validate the result
+### Step 11: Validate the result
 
-The agent checks frontmatter, reserved files, links, file size, naming, and privacy boundaries.
+The agent checks frontmatter, reserved files, governance files, links, file size, naming, and privacy boundaries.
 
-### Step 11: Generate a user guide
+### Step 12: Generate a user guide
 
 The agent adds a short `getting-started.md` guide explaining how to add files, link concepts, update indexes, and run validation. Because `getting-started.md` is a non-reserved Markdown file, it must include YAML frontmatter and a non-empty `type`.
 
@@ -619,6 +648,7 @@ Validation must check:
 - every non-reserved `.md` file has a non-empty root-level `type`
 - reserved `index.md` files are used for discovery
 - reserved `log.md` files are used for change history
+- `AGENTS.md`, when present, is used only for governance
 - links are portable
 - broken internal links are reported for quality control
 - intentional missing targets are clearly marked as planned
@@ -644,6 +674,7 @@ If not, use this simple validation checklist:
 [ ] Does every non-reserved .md file have a non-empty type field?
 [ ] Are index.md files used only for discovery?
 [ ] Are log.md files used only for change history?
+[ ] If AGENTS.md exists, does it clearly define governance rules?
 [ ] Do internal links use portable Markdown links?
 [ ] Are broken internal links reported?
 [ ] Are intentional missing targets clearly marked as planned?
@@ -685,7 +716,7 @@ Use a small routine so the knowledge base stays useful.
 Copy this into your agent:
 
 ```text
-Help me build or inspect an Open Knowledge Format knowledge base. First, ask me whether I already have a notes folder, second brain, vault, Drive folder, Git repo, or knowledge base. Ask where it is and whether I want to create a new OKF folder, modify an existing one, or only inspect and plan. Do not scan my whole computer. Only inspect folders I approve. Before changing anything, summarize what you found and show me your proposed structure. Do not delete, overwrite, move, or rename files unless I approve. Use OKF-style Markdown files with YAML frontmatter. Make one file per concept when creating new concept files. Use type as the required frontmatter field in every non-reserved .md file. Use index.md for discovery and log.md for change history. Validate the folder before calling it complete.
+Help me build or inspect an Open Knowledge Format knowledge base. First, ask me whether I already have a notes folder, second brain, vault, Drive folder, Git repo, or knowledge base. Ask where it is and whether I want to create a new OKF folder, modify an existing one, or only inspect and plan. Do not scan my whole computer. Only inspect folders I approve. Before changing anything, summarize what you found and show me your proposed structure. Do not delete, overwrite, move, or rename files unless I approve. Use OKF-style Markdown files with YAML frontmatter. Make one file per concept when creating new concept files. Use type as the required frontmatter field in every non-reserved .md file. Use index.md for discovery and log.md for change history. If the knowledge base will be shared, operational, or maintained by agents, create a root AGENTS.md governance file with folder rules, privacy boundaries, and approval rules. Validate the folder before calling it complete.
 ```
 
 ## 19. Troubleshooting

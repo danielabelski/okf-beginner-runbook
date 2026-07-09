@@ -1,6 +1,13 @@
 # Changelog
 
-## 2026-07-01
+## v0.1.1 - 2026-07-08
+
+- Added guidance for root `AGENTS.md` governance files in shared or agent-maintained OKF knowledge bases.
+- Added `AGENTS.md` to the starter OKF knowledge base as an optional governance layer.
+- Updated prompts and quick-start guidance to mention governance files where appropriate.
+- Updated `validate-okf.py` so `AGENTS.md` is treated as governance, not an OKF concept note requiring frontmatter.
+
+## v0.1.0 - 2026-07-01
 
 - Added a one-page quick-start card under `runbook/`.
 - Added optional Obsidian viewing guidance to the runbook and README.
