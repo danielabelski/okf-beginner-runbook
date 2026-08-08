@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.1.2 - 2026-08-08
+
+- Added the short video `How to Build an AI Brain in Five Minutes` under `videos/` and linked it from the README.
+- Excluded Windows `Zone.Identifier` metadata from Git tracking.
+
 ## v0.1.1 - 2026-07-08
 
 - Added guidance for root `AGENTS.md` governance files in shared or agent-maintained OKF knowledge bases.

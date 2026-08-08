@@ -4,7 +4,7 @@ Build or inspect an Open Knowledge Format knowledge base with any file-capable A
 
 This package helps a person or AI agent create, inspect, or gradually convert a knowledge base into an Open Knowledge Format style structure.
 
-Current version: `v0.1.1`
+Current version: `v0.1.2`
 
 ## What This Does
 
@@ -34,6 +34,7 @@ It is designed to work as a plain downloaded folder. Git is optional.
 - `prompts/` - Copy-paste prompts for agents and AI tools.
 - `examples/` - Small examples of OKF-style files.
 - `validate-okf.py` - A tiny dependency-free Python validator for basic OKF checks.
+- `videos/How_to_Build_an_AI_Brain_in_Five_Minutes.mp4` - Short visual introduction to building an OKF-style AI knowledge base.
 - `AGENTS.md` guidance - Optional but recommended governance for shared or agent-maintained knowledge bases.
 - `ABOUT.md` - Project background and purpose.
 - `CONTACT.md` - How to ask questions or suggest improvements.
@@ -62,6 +63,10 @@ starter-kit/okf-knowledge-base/
 ```
 
 The surrounding project files, such as this `README.md`, are distribution materials. They are not part of the starter OKF knowledge base unless you intentionally copy them into one.
+
+## Video Introduction
+
+Prefer to watch first? [Watch or download **How to Build an AI Brain in Five Minutes**](videos/How_to_Build_an_AI_Brain_in_Five_Minutes.mp4).
 
 ## Recommended Workflow
 
