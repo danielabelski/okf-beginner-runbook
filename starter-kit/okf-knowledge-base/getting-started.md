@@ -3,7 +3,9 @@ type: Guide
 title: Getting Started
 description: Basic instructions for using and maintaining this OKF knowledge base.
 tags: [guide, maintenance]
-timestamp: 2026-06-27T00:00:00Z
+generated:
+  by: human:alex
+  at: 2026-08-10T00:00:00Z
 ---
 
 # Getting Started
@@ -18,6 +20,7 @@ If this knowledge base is shared, operational, or maintained by AI agents, read 
 2. Rename it with a lowercase, hyphenated file name.
 3. Keep the YAML frontmatter at the top.
 4. Set a useful non-empty `type`.
-5. Add links to related files.
-6. Update the nearest `index.md` if the file is important.
-7. Add a short entry to `log.md` for meaningful changes.
+5. Optionally add `generated`, `sources`, `verified`, `status`, or `stale_after` when provenance, trust, or freshness tracking is useful.
+6. Add links to related files.
+7. Update the nearest `index.md` if the file is important.
+8. Add a short entry to `log.md` for meaningful changes.

@@ -44,9 +44,20 @@ type: Playbook
 title: Example Title
 description: A short plain-language summary.
 tags: [example, starter]
-timestamp: 2026-07-01T00:00:00Z
+generated:
+  by: human:alex
+  at: 2026-08-10T00:00:00Z
 ---
 ```
+
+Optional v0.2 fields you can add when useful:
+
+- `sources` - where the knowledge came from
+- `verified` - who confirmed this is accurate
+- `status` - `draft`, `stable`, or `deprecated`
+- `stale_after` - a date when the content should be reviewed
+
+The older `timestamp` field from v0.1 still works as a fallback.
 
 ## Reserved Files
 
@@ -57,6 +68,8 @@ timestamp: 2026-07-01T00:00:00Z
 Reserved files do not need frontmatter. Other `.md` files need frontmatter with a non-empty `type`.
 
 For a solo human-only vault, `AGENTS.md` is optional. For a shared, operational, or agent-maintained vault, create it so agents know what belongs, what is off limits, and when to ask before editing.
+
+The bundle-root `index.md` may declare `okf_version: "0.2"` in its frontmatter to signal the target OKF version.
 
 ## Copy-Paste Prompts
 
