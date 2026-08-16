@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.2.0 - 2026-08-16
+
+SimSuite test revisions. Five issues found through persona-based simulation testing:
+
+- Quick-start card: replaced undefined jargon (Markdown, frontmatter, domain) with plain-language definitions and added a minimal one-domain tree example before the full structure.
+- Quick-start card: added safety boundaries section (no secrets in OKF files, file-level exclusion guidance, clean staging folder recommendation).
+- Runbook Section 6A: added explicit prohibition on placing passwords, API keys, credentials, or account numbers in any OKF artifact.
+- Runbook Section 6B: added file-level exclusion guidance with allowlist/denylist and clean staging folder procedure for mixed-sensitivity folders.
+- Runbook Section 16: documented validator output (PASS/WARN/FAIL), exit codes, what the script checks, and what it does not check (broken link targets, index quality, log chronology, governance quality, file size, duplicates, privacy).
+
 ## v0.1.2 - 2026-08-08
 
 - Added the short video `How to Build an AI Brain in Five Minutes` under `videos/` and linked it from the README.
