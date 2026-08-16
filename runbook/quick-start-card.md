@@ -1,10 +1,14 @@
 # OKF Quick-Start Card
 
-OKF is a plain Markdown folder pattern that helps people and agents organize linked knowledge with simple frontmatter.
+OKF is a simple way to organize ordinary text notes in folders so you and an AI can find them. Each topic gets its own note, and a small label at the top tells the AI what the note is about.
+
+Markdown is a plain text writing format that uses simple symbols for headings, lists, and links. You can read it in any text editor.
+
+Frontmatter is a small label card at the very top of a note, sitting between two lines of `---`. It tells the AI what kind of note it is. You do not need to write it yourself; the agent can create it and show it to you.
 
 ## Beginner Flow
 
-1. Pick a domain.
+1. Pick a domain. A domain just means the first subject you want to organize, such as recipes, gardening, or one work project.
 2. Tell the agent what you already have.
 3. Approve one folder for inspection.
 4. Let the agent summarize and propose a structure.
@@ -13,6 +17,22 @@ OKF is a plain Markdown folder pattern that helps people and agents organize lin
 Optional: open the OKF folder in Obsidian as a free visual Markdown vault.
 
 ## Minimum Folder Structure
+
+For your first one-topic setup, keep it small:
+
+```text
+my-first-okf/
+  index.md
+  log.md
+  getting-started.md
+  gardening/
+    index.md
+    tomato-planting.md
+    seed-inventory.md
+    watering-guide.md
+```
+
+When you need several kinds of knowledge, use the full structure:
 
 ```text
 okf-knowledge-base/
@@ -58,6 +78,13 @@ Optional v0.2 fields you can add when useful:
 - `stale_after` - a date when the content should be reviewed
 
 The older `timestamp` field from v0.1 still works as a fallback.
+
+## Safety Boundaries
+
+- The agent must not scan your whole computer. Only approve one folder at a time.
+- Never put passwords, API keys, credentials, or account numbers in OKF files, frontmatter, indexes, logs, or governance files. Use a password manager or secrets store instead.
+- If a sensitive file sits inside an approved folder, tell the agent to skip that specific file or subfolder before it starts reading.
+- If sensitive and safe notes are mixed together and exclusions are hard to enforce, copy only the safe notes into a clean staging folder and approve that for inspection.
 
 ## Reserved Files
 

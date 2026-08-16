@@ -238,6 +238,31 @@ Version-controlled means a tool such as Git is tracking file history so changes 
 
 The agent must not delete, overwrite, move, or rename existing files without explicit user approval.
 
+## 6A. No Secrets in OKF Files
+
+Never place passwords, password hints, API keys, credentials, secret keys, account exports, or full financial account numbers in OKF concept files, frontmatter, `index.md`, `log.md`, `AGENTS.md`, prompts, or any other OKF artifact.
+
+OKF is a knowledge format, not a secrets store. Use a dedicated password manager or secrets vault for credentials. If a knowledge note needs to reference a credential, link to a safe procedure such as "store this in your password manager" rather than including the value itself.
+
+## 6B. File-Level Exclusion Guidance
+
+Folder-level approval is not enough when sensitive files sit inside an otherwise approved folder.
+
+Before scanning, record an explicit allowlist and denylist:
+
+- **Allowlist**: the specific folders and files approved for inspection.
+- **Denylist**: any sensitive files or subfolders inside an approved folder that must be skipped.
+
+Apply exclusions before file contents are opened. The agent should not open a denied file to decide whether it is sensitive.
+
+When exclusions cannot be technically enforced by the scanning tool, use a clean staging folder instead:
+
+1. Copy only the approved, non-sensitive files into a new folder.
+2. Approve that staging folder for inspection.
+3. Do not inspect the original mixed folder.
+
+This prevents accidental ingestion of renamed, nested, or unexpectedly sensitive material.
+
 ## 7. Friendly Qualifying Questions
 
 The agent should ask questions in normal language.
@@ -816,6 +841,34 @@ This starter repo also includes a tiny dependency-free validator script. From th
 ```bash
 python3 validate-okf.py starter-kit/okf-knowledge-base
 ```
+
+### Validator output and exit codes
+
+- `PASS`: no failures or warnings. The script exits with status 0.
+- `WARN`: advisory issues found, such as an unrecognized `okf_version`, missing `generated` metadata, or an unverified `status`. The script still exits with status 0 because warnings are not fatal.
+- `FAIL`: required checks failed, such as missing frontmatter, an empty `type` field, missing root `index.md` or `log.md`, or machine-specific link paths. The script exits with status 1.
+
+### What the validator checks
+
+- Root `index.md` and `log.md` exist and are non-empty.
+- Every non-reserved `.md` file starts with YAML frontmatter delimited by `---` on its own lines.
+- Every non-reserved `.md` file has a non-empty root-level `type` field.
+- Internal links do not contain machine-specific paths (Windows drive letters or `/home/` paths).
+- Optional v0.2 fields (`okf_version`, `generated`, `status`, `verified`) are validated against allowed shapes and values.
+
+### What the validator does not check
+
+The script is a basic structural validator. It does not replace manual or agent review for:
+
+- **Broken link targets**: it detects machine-specific paths but does not resolve relative links to verify the target file exists.
+- **Index quality**: it checks that root `index.md` exists and is non-empty, but cannot tell whether the index is current, useful, or supports discovery.
+- **Folder-level indexes**: it only requires a root `index.md`; it does not check whether each relevant folder has its own index.
+- **Log chronology**: it does not verify that `log.md` entries are chronological or newest-first.
+- **Governance quality**: it does not validate the contents of `AGENTS.md` as governance-only.
+- **Planned missing targets**: it does not distinguish intentional missing links marked as planned.
+- **File size, duplicates, naming, privacy, or sensitive content**: these require manual or agent review.
+
+After running the script, always complete the manual validation checklist below.
 
 If not, use this simple validation checklist:
 
