@@ -1,6 +1,6 @@
 # Open Knowledge Format Beginner Runbook
 
-Date: 2026-06-27
+Date: 2026-08-10
 
 Use this runbook when you want an AI agent, desktop AI app, command-line assistant, code assistant, or local AI harness to help you create a new Open Knowledge Format knowledge base or gradually turn an existing notes folder, reference vault, project archive, wiki, or second brain into an OKF-style knowledge base.
 
@@ -20,7 +20,8 @@ This guide is platform-neutral. It can be used with OpenClaw, Hermes, Hermes Des
 10. Make sure every non-reserved Markdown file has a non-empty `type` field.
 11. Use `index.md` files to help people and agents discover what is in each folder.
 12. Use `log.md` files to record meaningful changes over time.
-13. Validate the folder before calling it finished.
+13. Optionally, add `generated`, `sources`, `verified`, `status`, or `stale_after` to your frontmatter when you want to track provenance, trust, or freshness. These v0.2 fields are optional and can be added gradually.
+14. Validate the folder before calling it finished.
 
 ## 1. What OKF Is
 
@@ -33,6 +34,8 @@ Each important idea, process, asset, rule, or reference gets its own `.md` file.
 The body of the file is normal Markdown. That means the knowledge stays readable by people while also being easy for AI agents to crawl, search, link, and update.
 
 In plain English: OKF is a folder of linked notes with a small amount of structure at the top of each note.
+
+This runbook covers OKF v0.2, which adds optional fields for tracking where knowledge came from, who verified it, and whether it is still current. v0.1 bundles still work with v0.2 consumers. The new fields are optional, so you can adopt them at your own pace.
 
 ## 1A. Optional Obsidian Viewing
 
@@ -353,7 +356,9 @@ type: Guide
 title: Getting Started
 description: Basic instructions for using and maintaining this OKF knowledge base.
 tags: [guide, maintenance]
-timestamp: 2026-06-27T00:00:00Z
+generated:
+  by: human:alex
+  at: 2026-08-10T00:00:00Z
 ---
 
 # Getting Started
@@ -425,7 +430,9 @@ type: Playbook
 title: Example Playbook
 description: A plain-language summary of what this file explains.
 tags: [example, starter]
-timestamp: 2026-06-27T00:00:00Z
+generated:
+  by: human:alex
+  at: 2026-08-10T00:00:00Z
 ---
 ```
 
@@ -438,13 +445,41 @@ The `type` field must:
 - contain a short, useful value
 - not be empty
 
-Optional fields may include:
+### Recommended field: `generated`
+
+`generated` records who created or last changed the content and when. It has two sub-fields:
+
+- `by` - who produced the content, using the actor convention (see below)
+- `at` - an ISO 8601 datetime, such as `2026-08-10T00:00:00Z`
+
+Example:
+
+```yaml
+generated:
+  by: human:alex
+  at: 2026-08-10T00:00:00Z
+```
+
+`generated` is the recommended way to record when content was last changed. The older `timestamp` field from v0.1 still works as a fallback, and consumers should accept it when `generated` is absent. If you are starting fresh, use `generated` instead of `timestamp`.
+
+### Optional v0.2 fields
+
+OKF v0.2 adds several optional fields that help track where knowledge came from, who confirmed it, and whether it is still current. None of these are required. Add them when they are useful.
+
+- `sources` - where the knowledge came from. Each source can have a `resource` (required), plus optional `id`, `title`, `author`, `usage_count`, and `last_modified`. See the Provenance section below for details.
+- `verified` - a list of who confirmed this content is accurate. Each entry has `by` and `at`. See the Trust section below.
+- `status` - the lifecycle stage: `draft`, `stable`, or `deprecated`. If you leave it out, the file is treated as stable.
+- `stale_after` - a date like `2027-01-01`. When today is on or after that date, the content should be treated as stale.
+
+### Other optional fields
+
+These fields from v0.1 are still valid:
 
 - `title`
 - `description`
 - `resource`
 - `tags`
-- `timestamp`
+- `timestamp` (v0.1 fallback; prefer `generated` for new files)
 
 The body after the frontmatter can use normal Markdown headings, paragraphs, lists, tables, links, and code blocks.
 
@@ -475,12 +510,125 @@ Starter type values can include:
 - ResearchNote
 - TroubleshootingGuide
 - GlossaryTerm
+- Attested Computation (advanced, for data pipelines and automated outputs)
 
 Choose names that are easy to understand. You can rename or refine them later.
 
 Agents and tools should tolerate unknown types. A new type should not break the knowledge base.
 
-## 12. Internal Linking Rules
+## 12. Provenance, Trust, and Lifecycle (Optional v0.2 Fields)
+
+OKF v0.2 adds optional fields that help you track where knowledge came from, who confirmed it, and whether it is still current. These are all optional. You can add them one at a time as they become useful.
+
+### `generated` - Who created this and when
+
+`generated` records who produced or last changed the content and when that happened.
+
+```yaml
+generated:
+  by: human:alex
+  at: 2026-08-10T00:00:00Z
+```
+
+- `by` uses the actor convention (see below) to name who did the work.
+- `at` is an ISO 8601 datetime.
+
+This replaces the older `timestamp` field from v0.1. If you have existing files with `timestamp`, they still work. New files should use `generated`.
+
+### `verified` - Who confirmed this is accurate
+
+`verified` is a list of people or processes that checked the content.
+
+```yaml
+verified:
+  - by: human:alex
+    at: 2026-08-10T00:00:00Z
+```
+
+A single verifier can be written as a bare mapping:
+
+```yaml
+verified:
+  by: human:alex
+  at: 2026-08-10T00:00:00Z
+```
+
+Trust tiers are derived from who verified:
+- No `verified` key = unverified (no claim about accuracy).
+- Only non-human verifiers (like `process:auto-check`) = machine-confirmed.
+- At least one `human:` verifier = human-reviewed.
+
+### `status` - Draft, stable, or deprecated
+
+`status` tells readers whether the content is ready to rely on.
+
+```yaml
+status: stable
+```
+
+Valid values:
+- `draft` - still being written or reviewed.
+- `stable` - ready to use.
+- `deprecated` - no longer current; kept for reference.
+
+If you leave `status` out, the file is treated as stable.
+
+### `stale_after` - When this content gets stale
+
+`stale_after` is a date like `2027-01-01`. When today is on or after that date, the content should be treated as stale and may need a review.
+
+```yaml
+stale_after: 2027-01-01
+```
+
+This is useful for time-sensitive content like pricing, schedules, or policies that have an expiration date.
+
+### `sources` - Where the knowledge came from
+
+`sources` records the origin of the information in the file. Each source entry needs at least a `resource` field.
+
+```yaml
+sources:
+  - id: spec-v0.2
+    resource: https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md
+    title: OKF Specification v0.2
+    author: Google Cloud
+```
+
+Optional fields inside each source entry:
+- `id` - a short label you can use to cite this source in the body text.
+- `title` - a human-readable name.
+- `author` - who published the source.
+- `usage_count` - how many times this source is cited.
+- `last_modified` - when the source was last updated.
+
+You can also add a `usage_window` to frame when the usage counts apply:
+
+```yaml
+usage_window:
+  from: 2026-01-01
+  to: 2026-12-31
+```
+
+### Actor convention - How to name who did what
+
+When you fill in `by` fields in `generated` or `verified`, use this naming pattern:
+
+- `human:<id>` for a person, like `human:alex` or `human:jordan`.
+- `<producer>/<version>` for an AI agent or tool, like `openclaw/2.0` or `codex/1.0`.
+- `process:<id>` for an automated process, like `process:daily-validator`.
+
+This helps readers know whether a human, an AI, or an automated process produced or verified the content.
+
+### `references/` subdirectory convention
+
+OKF v0.2 suggests a `references/` subdirectory for mirroring external material that your knowledge base depends on. This is optional. If you have source documents, PDFs, or archived web pages that your concept files cite, you can store copies in `references/` so the knowledge base stays self-contained.
+
+### `Attested Computation` - Advanced type for data pipelines
+
+OKF v0.2 adds a concept type called `Attested Computation` for recording automated data processing results. It includes fields like `runtime`, `parameters`, `computation`, `executor`, and `attester`. This is an advanced type for data pipelines and automated outputs. Most beginners will not need it.
+
+## 13. Internal Linking Rules
 
 Use standard Markdown links.
 
@@ -511,7 +659,7 @@ Do not treat broken links as fatal OKF conformance errors. OKF consumers must to
 
 Mark intentional missing targets as planned.
 
-## 13. Reserved Files
+## 14. Reserved Files
 
 Two file names have special meaning in OKF.
 
@@ -534,13 +682,13 @@ Example:
 
 Do not use `index.md` as a concept file.
 
-Do not add YAML frontmatter to normal `index.md` files. They are reserved discovery files, not concept documents. Exception: the bundle-root `index.md` may include frontmatter only to declare the target OKF version, such as `okf_version: "0.1"`, if the user wants explicit version metadata.
+Do not add YAML frontmatter to normal `index.md` files. They are reserved discovery files, not concept documents. Exception: the bundle-root `index.md` may include frontmatter only to declare the target OKF version, such as `okf_version: "0.2"`, if the user wants explicit version metadata.
 
 Optional bundle-root `index.md` example:
 
 ```markdown
 ---
-okf_version: "0.1"
+okf_version: "0.2"
 ---
 
 # OKF Knowledge Base
@@ -572,7 +720,7 @@ Do not use `log.md` as a concept file.
 
 Do not add YAML frontmatter to `log.md`. It is a reserved history file, not a concept document.
 
-## 14. Agent Ingestion Strategy
+## 15. Agent Ingestion Strategy
 
 The agent must not load the whole OKF folder into context at once.
 
@@ -588,7 +736,7 @@ The agent should:
 
 This keeps the agent focused and prevents wasting context on unrelated files.
 
-## 15. Build Procedure
+## 16. Build Procedure
 
 Use this workflow when asking an agent to build a new OKF knowledge base, improve an existing OKF knowledge base, or gradually convert an existing non-OKF knowledge base into OKF-style structure.
 
@@ -662,7 +810,7 @@ The agent checks frontmatter, reserved files, governance files, links, file size
 
 The agent adds a short `getting-started.md` guide explaining how to add files, link concepts, update indexes, and run validation. Because `getting-started.md` is a non-reserved Markdown file, it must include YAML frontmatter and a non-empty `type`.
 
-## 16. Validation Rules
+## 17. Validation Rules
 
 The agent must validate before declaring the OKF bundle complete.
 
@@ -681,6 +829,10 @@ Validation must check:
 - no machine-specific file paths were used
 - no sensitive folders were included by accident
 - files are small enough for agent retrieval
+- if the root `index.md` declares `okf_version`, it should be a recognized version like `"0.2"` or `"0.1"`
+- if `generated` is present, it should have `by` and `at` sub-fields
+- if `status` is present, it should be one of `draft`, `stable`, or `deprecated`
+- if `verified` is present, it is worth noting whether a human reviewer is listed (advisory, not a failure)
 
 If an official validator or project validator is available in the user's environment, use it.
 
@@ -735,9 +887,13 @@ If not, use this simple validation checklist:
 [ ] Are file names lowercase and clear?
 [ ] Did I update the folder index after adding important files?
 [ ] Did I add a log entry for meaningful changes?
+[ ] If root index.md declares okf_version, is it a recognized version?
+[ ] If generated is present, does it have by and at sub-fields?
+[ ] If status is present, is it draft, stable, or deprecated?
+[ ] If verified is present, is a human reviewer listed (advisory)?
 ```
 
-## 17. Maintenance Routine
+## 18. Maintenance Routine
 
 Use a small routine so the knowledge base stays useful.
 
@@ -764,15 +920,15 @@ Use a small routine so the knowledge base stays useful.
 - Validate the whole bundle.
 - Review whether the folder is still easy for a person to understand.
 
-## 18. Beginner Copy-Paste Agent Prompt
+## 19. Beginner Copy-Paste Agent Prompt
 
 Copy this into your agent:
 
 ```text
-Help me build or inspect an Open Knowledge Format knowledge base. First, ask me whether I already have a notes folder, second brain, vault, Drive folder, Git repo, or knowledge base. Ask where it is and whether I want to create a new OKF folder, modify an existing one, or only inspect and plan. Do not scan my whole computer. Only inspect folders I approve. Before changing anything, summarize what you found and show me your proposed structure. Do not delete, overwrite, move, or rename files unless I approve. Use OKF-style Markdown files with YAML frontmatter. Make one file per concept when creating new concept files. Use type as the required frontmatter field in every non-reserved .md file. Use index.md for discovery and log.md for change history. If the knowledge base will be shared, operational, or maintained by agents, create a root AGENTS.md governance file with folder rules, privacy boundaries, and approval rules. Validate the folder before calling it complete.
+Help me build or inspect an Open Knowledge Format knowledge base. First, ask me whether I already have a notes folder, second brain, vault, Drive folder, Git repo, or knowledge base. Ask where it is and whether I want to create a new OKF folder, modify an existing one, or only inspect and plan. Do not scan my whole computer. Only inspect folders I approve. Before changing anything, summarize what you found and show me your proposed structure. Do not delete, overwrite, move, or rename files unless I approve. Use OKF-style Markdown files with YAML frontmatter. Make one file per concept when creating new concept files. Use type as the required frontmatter field in every non-reserved .md file. Use index.md for discovery and log.md for change history. If the knowledge base will be shared, operational, or maintained by agents, create a root AGENTS.md governance file with folder rules, privacy boundaries, and approval rules. Optionally, add generated, sources, verified, status, or stale_after to frontmatter when provenance, trust, or freshness tracking is useful. Validate the folder before calling it complete.
 ```
 
-## 19. Troubleshooting
+## 20. Troubleshooting
 
 ### Broken links
 
@@ -818,7 +974,7 @@ Stop. Ask the agent to identify the affected files. Remove or redact the private
 
 Do not force everything into OKF at once. Keep old notes in a separate folder, then convert the most useful ones one at a time.
 
-## 20. Final Deliverables Checklist
+## 21. Final Deliverables Checklist
 
 Use this list to confirm the OKF starter bundle is complete.
 
@@ -873,7 +1029,9 @@ type: Playbook
 title: Customer Intake
 description: Steps for receiving and organizing a new customer request.
 tags: [customers, intake, operations]
-timestamp: 2026-06-27T00:00:00Z
+generated:
+  by: human:alex
+  at: 2026-08-10T00:00:00Z
 ---
 
 # Purpose
@@ -926,6 +1084,10 @@ This folder contains repeatable procedures.
 [ ] No machine-specific paths are used for internal links.
 [ ] No sensitive folders or private files were included by accident.
 [ ] No giant catch-all files were created.
+[ ] If root index.md declares okf_version, it is a recognized version.
+[ ] If generated is present, it has by and at sub-fields.
+[ ] If status is present, it is draft, stable, or deprecated.
+[ ] If verified is present, a human reviewer is listed (advisory).
 ```
 
 ### Maintenance routine
@@ -950,7 +1112,7 @@ Monthly:
 ### Reusable agent prompt
 
 ```text
-Help me build or inspect an Open Knowledge Format knowledge base. First, ask me whether I already have a notes folder, second brain, vault, Drive folder, Git repo, or knowledge base. Ask where it is and whether I want to create a new OKF folder, modify an existing one, or only inspect and plan. Do not scan my whole computer. Only inspect folders I approve. Before changing anything, summarize what you found and show me your proposed structure. Do not delete, overwrite, move, or rename files unless I approve. Use OKF-style Markdown files with YAML frontmatter. Make one file per concept when creating new concept files. Use type as the required frontmatter field in every non-reserved .md file. Use index.md for discovery and log.md for change history. Validate the folder before calling it complete.
+Help me build or inspect an Open Knowledge Format knowledge base. First, ask me whether I already have a notes folder, second brain, vault, Drive folder, Git repo, or knowledge base. Ask where it is and whether I want to create a new OKF folder, modify an existing one, or only inspect and plan. Do not scan my whole computer. Only inspect folders I approve. Before changing anything, summarize what you found and show me your proposed structure. Do not delete, overwrite, move, or rename files unless I approve. Use OKF-style Markdown files with YAML frontmatter. Make one file per concept when creating new concept files. Use type as the required frontmatter field in every non-reserved .md file. Use index.md for discovery and log.md for change history. Optionally, add generated, sources, verified, status, or stale_after to frontmatter when provenance, trust, or freshness tracking is useful. Validate the folder before calling it complete.
 ```
 
 ### Troubleshooting guide
@@ -958,7 +1120,7 @@ Help me build or inspect an Open Knowledge Format knowledge base. First, ask me 
 If something feels messy, do not rebuild everything. Ask the agent for a small repair plan:
 
 ```text
-Inspect this Open Knowledge Format knowledge base and recommend the smallest safe repair plan. Do not change anything yet. Report missing frontmatter, empty type fields, broken links, confusing file names, duplicate concepts, giant files, weak index.md files, missing log entries, machine-specific paths, and possible privacy issues. Then ask for approval before making any edits.
+Inspect this Open Knowledge Format knowledge base and recommend the smallest safe repair plan. Do not change anything yet. Report missing frontmatter, empty type fields, broken links, confusing file names, duplicate concepts, giant files, weak index.md files, missing log entries, machine-specific paths, possible privacy issues, and v0.1 timestamp fields that could be migrated to generated. Then ask for approval before making any edits.
 ```
 
 ## Inspection Notes
@@ -966,7 +1128,7 @@ Inspect this Open Knowledge Format knowledge base and recommend the smallest saf
 Sources used:
 
 - Google Cloud OKF announcement: <https://cloud.google.com/blog/products/data-analytics/how-the-open-knowledge-format-can-improve-data-sharing>
-- Official OKF v0.1 draft specification: <https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md>
+- Official OKF v0.2 specification: <https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md>
 - Andrej Karpathy's LLM Wiki pattern: <https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f>
 - Marie Haynes OKF overview: <https://www.mariehaynes.com/okf/>
 - Optional video page reviewed for context: <https://www.youtube.com/watch?v=esYAIA6lU-s>
@@ -974,7 +1136,8 @@ Sources used:
 Key source notes:
 
 - Google's OKF announcement frames OKF as an open, vendor-neutral, human-friendly and agent-friendly format made of Markdown files with YAML frontmatter.
-- The official OKF spec says the required field is `type`, that only `index.md` and `log.md` are reserved Markdown filenames, that reserved files should not have frontmatter or be used as concept documents, that `log.md` entries are newest first, that broken links are tolerated by OKF consumers, and that OKF does not prescribe a fixed taxonomy or storage system.
+- The official OKF v0.2 spec says the required field is `type`, that only `index.md` and `log.md` are reserved Markdown filenames, that reserved files should not have frontmatter or be used as concept documents, that `log.md` entries are newest first, that broken links are tolerated by OKF consumers, and that OKF does not prescribe a fixed taxonomy or storage system.
+- v0.2 adds optional provenance, trust, and lifecycle fields: `generated` (supersedes `timestamp`), `sources`, `verified`, `status`, and `stale_after`. It also adds the `Attested Computation` concept type and the `references/` subdirectory convention.
 - Karpathy's LLM Wiki pattern emphasizes a persistent, compounding wiki that agents maintain through indexing, logging, cross-linking, and periodic linting instead of re-discovering raw documents every time.
 - Marie Haynes' overview adds a beginner-friendly business framing: each concept becomes a Markdown file, frontmatter works like an index card, and agents should use the structure to find the right knowledge instead of stuffing everything into context.
 
@@ -991,4 +1154,4 @@ Human review recommended before publishing:
 - Confirm whether the starter folder names match the target audience.
 - Decide whether to include a tiny validator script in a future technical appendix.
 - Decide whether to mention Git more strongly for team use.
-- Re-check the official OKF spec before publishing publicly, because OKF v0.1 is marked as a draft and may change.
+- Re-check the official OKF spec before publishing publicly, because OKF v0.2 may receive further updates.

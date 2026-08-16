@@ -10,6 +10,19 @@ SimSuite test revisions. Five issues found through persona-based simulation test
 - Runbook Section 6B: added file-level exclusion guidance with allowlist/denylist and clean staging folder procedure for mixed-sensitivity folders.
 - Runbook Section 16: documented validator output (PASS/WARN/FAIL), exit codes, what the script checks, and what it does not check (broken link targets, index quality, log chronology, governance quality, file size, duplicates, privacy).
 
+## v0.2.0-alpha - 2026-08-10
+
+- Updated the runbook, quick-start card, starter kit, examples, prompts, and validator to align with OKF spec v0.2.
+- Replaced `timestamp` with `generated: { by, at }` as the recommended content-change field. `timestamp` is still accepted as a v0.1 fallback.
+- Added optional v0.2 frontmatter fields: `sources`, `verified`, `status`, `stale_after`.
+- Added a new runbook section: "Provenance, Trust, and Lifecycle (Optional v0.2 Fields)" with beginner-friendly explanations of `generated`, `verified`, `status`, `stale_after`, `sources`, the actor convention, the `references/` subdirectory convention, and `Attested Computation`.
+- Added `Attested Computation` to the recommended concept types list.
+- Updated the root `index.md` `okf_version` example from `"0.1"` to `"0.2"`.
+- Updated the validation checklist and validator script to check v0.2 optional fields when present.
+- Updated all sample files, templates, and prompts to use `generated` and mention v0.2 optional fields.
+- Updated the starter kit root `index.md` to declare `okf_version: "0.2"`.
+- Updated `AGENTS.md` to mention v0.2 optional fields.
+
 ## v0.1.2 - 2026-08-08
 
 - Added the short video `How to Build an AI Brain in Five Minutes` under `videos/` and linked it from the README.

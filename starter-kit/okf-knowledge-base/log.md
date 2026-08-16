@@ -1,5 +1,10 @@
 # Knowledge Base Log
 
+## 2026-08-10
+
+- **Spec update**: Updated to OKF v0.2. Replaced `timestamp` with `generated: { by, at }`. Added optional v0.2 fields: `sources`, `verified`, `status`, `stale_after`.
+- **Version**: Root `index.md` now declares `okf_version: "0.2"`.
+
 ## 2026-07-08
 
 - **Governance**: Added `AGENTS.md` guidance for shared or agent-maintained knowledge bases.

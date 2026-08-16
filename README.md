@@ -2,9 +2,9 @@
 
 Build or inspect an Open Knowledge Format knowledge base with any file-capable AI agent, CLI, desktop app, or local harness.
 
-This package helps a person or AI agent create, inspect, or gradually convert a knowledge base into an Open Knowledge Format style structure.
+This package helps a person or AI agent create, inspect, or gradually convert a knowledge base into an Open Knowledge Format v0.2 style structure.
 
-Current version: `v0.1.2`
+Current version: `v0.2.0`
 
 ## What This Does
 

@@ -3,7 +3,10 @@ type: Playbook
 title: Customer Intake
 description: Steps for receiving and organizing a new customer request.
 tags: [customers, intake, operations]
-timestamp: 2026-06-27T00:00:00Z
+generated:
+  by: human:alex
+  at: 2026-08-10T00:00:00Z
+status: stable
 ---
 
 # Customer Intake

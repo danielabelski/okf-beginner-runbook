@@ -35,6 +35,8 @@ Do not create new top-level folders unless the human approves.
 - Use one Markdown file per concept, decision, procedure, reference, or project note.
 - Use clear lowercase kebab-case filenames.
 - Add YAML frontmatter with a non-empty `type` to non-reserved Markdown files.
+- Use `generated: { by, at }` to record who created or last changed the content and when. The older `timestamp` field from v0.1 is still accepted as a fallback.
+- Optionally add `sources`, `verified`, `status`, or `stale_after` to frontmatter when provenance, trust, or freshness tracking is useful.
 - Use `index.md` for folder discovery.
 - Use `log.md` for chronological change history.
 - Prefer links between notes over copying the same information into multiple places.

@@ -3,7 +3,15 @@ type: Reference
 title: Seed Tray Size Reference
 description: A quick reference for common microgreens tray sizes.
 tags: [microgreens, tools, trays]
-timestamp: 2026-07-01T00:00:00Z
+generated:
+  by: human:alex
+  at: 2026-08-10T00:00:00Z
+status: stable
+sources:
+  - id: supplier-catalog
+    resource: https://example.com/tray-sizes
+    title: Supplier Tray Catalog
+    author: Example Supplier
 ---
 
 # Seed Tray Size Reference

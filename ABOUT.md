@@ -1,6 +1,6 @@
 # About This Project
 
-OKF Beginner Runbook for Local Agentic Tools is a beginner-friendly package for people who want to organize a knowledge base using Google's Open Knowledge Format ideas.
+OKF Beginner Runbook for Local Agentic Tools is a beginner-friendly package for people who want to organize a knowledge base using Google's Open Knowledge Format v0.2 ideas.
 
 The goal is simple: help a person use any file-capable AI agent, CLI, desktop AI app, or local harness to create, inspect, or gradually improve a knowledge base without needing to be deeply technical.
 
